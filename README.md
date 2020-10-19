@@ -376,10 +376,10 @@ import datetime
 ```
 filepath="weight_pneunomia_best.h5"
 checkpoint = ModelCheckpoint(filepath, monitor='val_accuracy', verbose=1, save_best_only= True, mode='max')
-callbacks_list = [checkpoint]
+CALLBACKS.append(checkpoint)
 
 logdir = os.path.join("logs", datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-callbacks_list.append(TensorBoard(logdir,histogram_freq=1))
+CALLBACKS.append(TensorBoard(logdir,histogram_freq=1))
 ```
 kemudian menyesuaikan model. Penting untuk diingat di sini untuk menggunakan weight untuk class yang yang sudah dihitung sebelumnya
 ```
@@ -387,7 +387,7 @@ history = model.fit(datagen.flow(x_train,y_train, batch_size = BATCH_SIZE),
                     steps_per_epoch=x_train.shape[0]/BATCH_SIZE, 
                     validation_data = (x_val, y_val),
                     validation_steps=x_val.shape[0]/BATCH_SIZE,
-                    callbacks = callbacks_list,
+                    callbacks = CALLBACKS,
                     class_weight = weights,
                     epochs = 30)
 ```
@@ -476,7 +476,7 @@ plt.imshow(img)
 x=image.img_to_array(img)
 x=x.reshape((1,) + x.shape)
 
-val=model.predict(x_val)
+val=model.predict(x)
 result = np.argmax(val[0]).tolist()
 print('Class : '+str(result))
 ```
